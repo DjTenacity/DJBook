@@ -4,19 +4,26 @@
  　所以，GitBook 不是 Markdown 编辑工具，也不是 Git 版本管理工具。市面上我们可以找到很多 Markdown 编辑器，比如 Typora、MacDown、Bear、MarkdownPad、MarkdownX、JetBrains’s IDE（需要安装插件）、Atom、简书、CSDN 以及 GitBook 自家的 GitBook Editor 等等。 
 　简单来说，GitBook + Markdown + Git 带来的好处有：
 * 语法简单
-
 * 兼容性强
-
 * 导出方便
-
 * 专注内容
-
 * 团队协作
   
-   因为 GitBook 是基于 Node.js，所以我们首先需要安装 Node.js（ [下载地址](https://nodejs.org/en/download/)），找到对应平台的版本安装即可。
-
-　　现在安装 Node.js 都会默认安装 npm（node 包管理工具），所以我们不用单独安装 npm，
-
+因为 GitBook 是基于 Node.js，所以我们首先需要安装 Node.js（ [下载地址](https://nodejs.org/en/download/)），找到对应平台的版本安装即可。
+现在安装 Node.js 都会默认安装 npm（node 包管理工具），所以我们不用单独安装 npm，
+* #### 目录结构
+```
+        .
+        ├── book.json
+        ├── README.md
+        ├── SUMMARY.md
+        ├── chapter-1/
+        |   ├── README.md
+        |   └── something.md
+        └── chapter-2/
+            ├── README.md
+            └── something.md
+```
 * 打开命令行，执行以下命令安装 GitBook：
  `npm install -g gitbook-cli`
 
@@ -42,20 +49,7 @@
     * [第三章](Chapter3/README.md)
     * [第四章](Chapter4/README.md)
     ```
-* #### 目录结构
 
-```
-        .
-        ├── book.json
-        ├── README.md
-        ├── SUMMARY.md
-        ├── chapter-1/
-        |   ├── README.md
-        |   └── something.md
-        └── chapter-2/
-            ├── README.md
-            └── something.md
-```
 
 * 回到命令行，在 mybook 文件夹中再次执行 gitbook init 命令。
    GitBook 会查找 SUMMARY.md 文件中描述的目录和文件，如果没有则会将其创建
