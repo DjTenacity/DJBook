@@ -16,7 +16,7 @@
 	* [Java对象的序列化与反序列化](Java/Java对象的序列化与反序列化.md)
 * [开发注意事项](Android/致命Android.md) 
 	* [禁止SimpleDateFormat定义为static类型](warning/开发规范-禁止把SimpleDateFormat定义为static类型.md)
-	* [禁止使用isSuccess作为变量](warning/开发规范--禁止开发人员使用isSuccess作为变量 .md)
+	* [禁止使用isSuccess作为变量](warning/开发规范--禁止开发人员使用isSuccess作为变量.md)
 * [正则表达式](正则表达式/正则表达式1--Python.md)
 	* [正则表达式1](正则表达式/正则表达式1--Python.md)
 	* [正则表达式2](正则表达式/正则表达式2--Python.md)

@@ -63,3 +63,19 @@ print(re.match(r"aa(\d+)ddd","aa2343ddd").group(1))		# 			---->2343
 print(re.match(r"aa(\d+?)ddd","aa2343ddd").group(1))	# 			---->2343
 ```
 
+
+
+```python
+#https://blog.csdn.net/qq_32451373/article/details/77743869
+#---->
+#https://blog.csdn.net
+
+# sub 将匹配到的数据进行替换    
+s = "https://blog.csdn.net/qq_32451373/article/details/77743869";
+# ?去掉贪婪模式  x是s整个匹配对象 x.group(1)是返回值 ,返回结果
+print(re.match(r"(https://.+?/).*",s).group(1))
+m = re.sub(r"(https://.+?/).*", lambda x: x.group(1), s);
+print(m)
+
+```
+
