@@ -255,13 +255,15 @@ System.out.println(s1.equals(s2));
 ```java
 String s1 = "abc";
 String s2 = new String("abc");
+String s3 = "abc";
 s2.intern();
-System.out.println(s1 ==s2);
+System.out.println(s1 ==s2+""+s1.equals(s2));
+System.out.println(s1 == s3 +""+s1.equals(s3));
 ```
 
-输出false，intern()方法将返回从字符串池中的字符串对象的引用，但因为我们没有分配到S2，S2没有变化，如果该第三行代码为s2 =
+输出false，intern()方法将返回从字符串池中的字符串对象的引用，但因为我们没有分配到S2，S2没有变化，如果该第三行代码为s2 =s2.intern()，则输出true。
 
-s2.intern()，则输入true。
+equals() 方法比较的是字符串的内容~所以结果都是是 true 很好理解，至于 str1==str3  的结果也是 true ，是因为在 Java 的内存的**方法区中有一块区域叫做常量池**，str1 =“abc” 时，常量池中没有 “abc”，所以就 new 一个 “abc” 当运行 str3 = “abc” 时，常量池中存在 “abc” ，系统就会把 常量池中的 “abc” 的引用直接给 str3 所以 str1==str3 的结果为 true，因为它们的引用是一样的 
 
 #### 4、下面的代码将创建几个字符串对象。
 
@@ -272,8 +274,67 @@ String s2 = new String("Hello");
 
 答案是3个对象.
 
-第一，行1 字符串池中的“hello”对象。
+第一，行1 字符串池中的“hello”对象。**常量池中的引用**
 
-第二，行1，在堆内存中带有值“hello”的新字符串。
+第二，行1，在堆内存中带有值“hello”的新字符串。堆中开辟一块空间，然后把引用赋值给 str1
 
 第三，行2，在堆内存中带有“hello”的新字符串。这里“hello”字符串池中的字符串被重用。
+
+#### 5、下面的代码输入什么
+
+```java
+String s1 = "abc";
+String s2 = "a"+"b"+"c";
+System.out.println(s1 ==s2+""+s1.equals(s2));
+```
+
+都是true 这个 str1==str2 为何为 true 小伙伴们知道吗？嘿嘿因为在Java中有一种叫做**常量优化的机制**，我们在赋值的时候 “a”，“b”，“c”都是常量，系统及直接把 abc 赋值给 str1 了，这时候常量池中也就存在 “abc” 了，所以str1==str2 
+
+#### 5、**判断String类型的 s1 和 s2 是否相等**
+
+```java
+String s1 = "abc";
+String s2 = "ab";
+String s3 = s2+"c";
+System.out.println(s3 ==s2+""+s3.equals(s2));
+```
+
+false true  『**Java 语言提供对字符串串联符号（"+"）以及将其他对象转换为字符串的特殊支持。字符串串联是通过 StringBuilder（或 StringBuffer）类及其 append 方法实现的。字符串转换是通过 toString 方法实现的...』**
+
+也就是说当执行 str3=str1+c 的时候，首先在堆中生成一个StringBuilder（或StringBuffer）对象，然后把 ab 和 c 连接在一起 ，再利用 toString 方法生成一个 “abc”的字符串 再来进行比较..str2 的 “abc” 在常量池中，str3 在堆中所以为false~
+
+#### 6
+
+需求：
+
+给三次机会，并且提示还有几次
+
+分析：
+
+1）需要键盘输入账户名和密码
+
+2）需要进行循环判断
+
+```java
+public class Test1 {
+
+ public static void main(String[] args) {
+   Scanner in = new Scanner(System.in);
+   for(int i=0; i<3; i++){
+     System.out.println("请输入用户名");
+     String userName = in.nextLine();
+     System.out.println("请输入密码");
+     String password = in.nextLine();
+     if ("admin".equals(userName)&&"admin".equals(password)) {
+       System.out.println("欢迎"+userName+"!!!");
+       break;
+     }else{
+       System.out.println("用户名或密码错误~~");
+       System.out.println("还有"+(2-i)+"次机会");
+     }
+   }  
+ }
+}  
+```
+
+ 
