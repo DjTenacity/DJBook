@@ -146,7 +146,7 @@
 
 3） 从内到外单向调用
 
-根据洋葱结构，由内到外我们可以得到Model -> Work -> Converter -> Presenter -> UI;在调用时，某层只能调用向内的邻接层，如Presenter只能调用Work层（存在异步操作时）或Model层（无异步操作，甚至无异步操作也可以在Work中封装一层），而不能出现Model层调用Presenter层的现象；相同的，UI层只能调用Presenter层，而不能跨层调用Model层；Converter作为外围辅助层，不直接参与洋葱结构
+根据洋葱结构，由内到外我们可以得到Model -> Work -> Converter -> Presenter -> UI;在调用时，**某层只能调用向内的邻接层**，如Presenter只能调用Work层（存在异步操作时）或Model层（无异步操作，甚至无异步操作也可以在Work中封装一层），而不能出现Model层调用Presenter层的现象；相同的，UI层只能调用Presenter层，而不能跨层调用Model层；Converter作为外围辅助层，不直接参与洋葱结构
 
 ![img](https://mmbiz.qpic.cn/mmbiz_png/j0ROiac4adEtRo0nG6X5OErXpDibx3QbudjxVq9aWGFwvcBzz7QGOia97MXAnouBA8R1WQmepoJFQj68A91s4A6kg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
@@ -168,7 +168,7 @@
 
 显示结果
 
-参数校验， 参数的具体信息来自View层，但是其本身功能为逻辑处理，因此适合在Presenter层
+**参数校验， 参数的具体信息来自View层，但是其本身功能为逻辑处理，因此适合在Presenter层**
 
 加载， 取消加载 涉及到Activity Context来加载Dialog,因此适合在View层
 
