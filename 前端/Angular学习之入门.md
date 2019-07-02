@@ -127,7 +127,7 @@ this.h="这是一个 h2 用[innerHTML]来解析"
 <div [id]="id" [title]="msg">调试工具看看我的属性div>
 ```
 
-**三、数据循环** ***ngFor**
+###  三、数据循环 ngFor 
 
 **1**、***ngFor 普通循环**
 

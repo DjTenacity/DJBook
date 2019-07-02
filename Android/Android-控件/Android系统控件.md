@@ -79,7 +79,33 @@ tvContent.setText(Html.fromHtml(content));
 
 ### EditText maxLines  显示密码  光标位置
 
-- ```
+```
+EditText 设置光标颜色 
+android:textCursorDrawable="#ff2244"
+如果想设置光标颜色和字体一样 设置@null 即可
+
+使用XML配置文件控制光标的代码
+cursorVisible 中
+true为显示  
+false为隐藏光标
+android:cursorVisible="true"
+android:cursorVisible="false"
+
+EditText不自动获取焦点    在EditText的父级控件上设置
+android:focusable="true"
+android:focusableInTouchMode="true"
+```
+```
+    private void killEtView(EditText editText, String str) {
+        editText.setEnabled(false);
+        editText.setFocusable(false);
+        editText.setKeyListener(null);//重点
+        if (!TextUtils.isEmpty(str)) {
+            editText.setText(str);
+        }
+    }
+```
+```
   //显示密码
   etInputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
   //光标在结尾处     etInputPassword.setSelection(etInputPassword.getText().length());
@@ -89,7 +115,7 @@ tvContent.setText(Html.fromHtml(content));
   //CheckBox
   	android:button="@null"
       android:drawableRight="@drawable/selector_registry_cb"
-  ```
+```
 
 - maxLines对应着EditText 的最大高度 , 控制的是外部边框,而不是内部文本的行数
 
@@ -179,7 +205,7 @@ show()的后面，不然你的改动会没有效果。
 
 ​     1. 先自定义一个AlertDialog布局alertdialog.xml，包括两部分：一个textView 用来显示Title；一个ListView显示相关的选项:
 
-### android获取屏幕的高度和宽度
+### 获取屏幕的高度和宽度
 
 ```
 android获取屏幕的高度和宽度用到WindowManager这个类，两种方法： 
@@ -204,3 +230,85 @@ android获取屏幕的高度和宽度用到WindowManager这个类，两种方法
 4. 修改根目录下的.iml文件名为[NewName].iml，及该文件中的external.linked.project.id=[NewName]
 5. 修改.idea/modules.xml里面的
 <module fileurl="file://$PROJECT_DIR$/[NewName].iml" filepath="$PROJECT_DIR$/[NewName].iml" />
+
+
+
+### 代码动态设置字体大小
+
+//给一个id为name的TextView设置字体大小 
+TextView mName = (TextView)findViewById(R.id.name); 
+mName.setTextSize(22); 
+
+开始学Android的时候，设置字体大小，无非用上面的代码。写的非常舒服，都不知道22用的是什么单位，字体太小，数字改大点，字体太大，数字改小点。Android编写多了，想要读dimens里设置的22值。很简单下面就是代码。
+
+```
+//XML中的定义<dimen name="my_text_size">22sp</dimen> 
+//给一个id为name的TextView设置字体大小 
+TextView mName = (TextView)findViewById(R.id.name); 
+mName.setTextSize(TypedValue.COMPLEX_UNIT_PX, 
+                getResources().getDimensionPixelSize(R.dimen.my_text_size)); 
+```
+
+
+
+有时候用一个方法都不怎么看单位了，只知道类型，其实setTextSize()方法写的很清楚，一个参数的方法，单位是scaled pixel，就是sp，不是px(像素)。也就是跟一般xml中定义的
+
+`<dimen name="my_text_size">22sp</dimen>`
+
+是一个单位。两个参数的重载方法，一个是单位，一个是数值。一般例子：
+
+```
+setTextSize(TypedValue.COMPLEX_UNIT_PX,22); //22像素 
+setTextSize(TypedValue.COMPLEX_UNIT_SP,22); //22SP 
+setTextSize(TypedValue.COMPLEX_UNIT_DIP,22);//22DIP 
+```
+
+
+
+getDimensionPixelSize()方法返回的是像素数值，所以
+
+ ```
+mName.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.my_text_size));
+ ```
+
+
+
+是这样的写法。
+开始我写成了
+
+```
+mName.setTextSize(getResources().getDimensionPixelSize(R.dimen.my_text_size));
+
+发生了严重错误，如上所说，setTextSize默认是SP单位，我却传进去了像素的数值，结果字体变异常大了。
+```
+
+### TextView  phoneNumber 与 android:autoLink属性
+
+android:autoLink : 
+
+    设置是否当文本为URL链接/email/电话号码/map时，文本显示为可点击的链接。可选值(none/web/email/phone/map/all)
+
+ 
+
+
+
+android:phoneNumber
+
+
+    设置为电话号码的输入方式。
+
+ 
+
+
+
+
+
+1. autoLink 可选值(none/web/email/phone/map/all)。
+
+    phoneNumber 可选值(true/false)
+
+
+2. autoLink 是针对里面输入的内容的格式。当设置成 "web" 格式时，可以识别 "http://" 开头的文本，当用户点击时，可以自动打开浏览器。同理，设置成"phone" "email" 格式时，当遇到 "+860757XXXXXXXX" 电话号码时，用户点击会自动拨打电话，遇到"XXX@csdn.net" E-mail 格式时，用户点击会触发 email 功能。
+
+   phoneNumber 是设置输入时的格式，true 表示只能输入 电话号码类型的内容。 
