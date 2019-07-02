@@ -14,7 +14,7 @@
 
 仅看完了《架构之美》的第一部分：**论架构**，对架构有了一个大概的认识。下图是这部分的知识点概要：
 
-![](C:\Users\Administrator\Desktop\DJGitBook\img\架构之美.jpg)
+![](C:\Users\Administrator\Desktop\DJGitBook\img\架构\架构之美.jpg)
 
 **书中很受启发的概念：**
 
@@ -87,7 +87,7 @@
 
 + 在构建阶段，考虑的就是具体的实施问题，并且要保证一定的伸缩扩展性，因为架构是不断演进的。 《软件架构设计》一书的一个模型图 :
 
-  ![](C:\Users\Administrator\Desktop\DJGitBook\img\模型图.jpg)
+  ![](C:\Users\Administrator\Desktop\DJGitBook\img\架构\模型图.jpg)
 
   架构的设计可以从两个维度来考虑，**一是架构思维，二是架构原则。**
 
