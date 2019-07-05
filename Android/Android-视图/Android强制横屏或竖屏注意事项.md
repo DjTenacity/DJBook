@@ -48,11 +48,11 @@ protected void onResume() {
 
 3、在onConfigurationChanged里判断，为了onConfigurationChanged在监听屏幕方向变化有效需要以下条件:
 
-a、AndroidManifest.xml增加权限(经过测试5.1不需要,其它自己测试看吧)
+​	a、AndroidManifest.xml增加权限(经过测试5.1不需要,其它自己测试看吧)
 
-b、AndroidManifest.xml里设置的MiniSdkVersion和TargetSdkVersion属性大于等于13(经过测试5.1已经是22,自然不需要)
+​	b、AndroidManifest.xml里设置的MiniSdkVersion和TargetSdkVersion属性大于等于13(经过测试5.1已经是22,自然不需要)
 
-c、在AndroidManifest.xml的Activity里增加(经过测试5.1只需要orientation,其它自己测试,可能还需要screenSize和layoutDirection):
+​	c、在AndroidManifest.xml的Activity里增加(经过测试5.1只需要orientation,其它自己测试,可能还需要screenSize和layoutDirection):
 
 android:configChanges=”orientation”
 
@@ -128,4 +128,3 @@ setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 先说一下 我们的app 启动 app 启动默认的竖屏启动的 但是如果在启动过程中 app 感应到重力发生变化 activity 就会发生改变 无论你有没有设置方向 而此时就有可能删除 这是数据问题 异常自己捕获就好了
 --------------------- 
- 
