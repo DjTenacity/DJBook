@@ -86,10 +86,10 @@ class MyApp extends StatelessWidget{
 			child: Text( "我是 Dart 一个文本内容", 
 			textDirection: TextDirection.ltr, 
 			style:TextStyle(
-			fontSize: 40.0, 
-			fontWeight: FontWeight.bold, 
-			// color: Colors.yellow
-			color: Color.fromRGBO(255, 222, 222, 0.5)
+				fontSize: 40.0, 
+				fontWeight: FontWeight.bold, 
+				// color: Colors.yellow
+				color: Color.fromRGBO(255, 222, 222, 0.5)
 			), ), );
 	}
 }
