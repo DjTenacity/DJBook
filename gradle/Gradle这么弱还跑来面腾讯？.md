@@ -1,8 +1,4 @@
-## Gradle这么弱还跑来面腾讯？
-
-######  https://www.jianshu.com/p/1274c1f1b6a4
-
-
+## Gradle[这么弱还跑来面腾讯](https://www.jianshu.com/p/1274c1f1b6a4)？
 
 #### 前言
 

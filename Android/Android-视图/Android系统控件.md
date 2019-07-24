@@ -55,7 +55,7 @@ spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 5, Spa
 
 以上只是列举了几个常见的用法，更多的可以参考android.text.style包下面的几个类
 
-![](C:\Users\admin\Desktop\DJGitBook\img\android\android.text.style.jpg)
+![](D:\DJGitBook\img\android\android.text.style.jpg)
 
 SpannableString的优点在于控制得精细，缺点也是在这。我们使用SpannableString的时候必须指定样式使用的字符下标，那如果我们的字符串不是固定长度的呢？
 
@@ -293,12 +293,14 @@ android:autoLink :
 
 
 
+
 android:phoneNumber
 
 
     设置为电话号码的输入方式。
 
  
+
 
 
 
