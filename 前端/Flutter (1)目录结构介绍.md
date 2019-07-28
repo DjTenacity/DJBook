@@ -393,3 +393,46 @@ class HomeContent extends StatelessWidget {
 }
 ```
 
+
+
+### 五、Flutter 列表组件概述
+
+Flutter 中我们可以通过 ListView 来定义
+列表项，支持垂直和水平方向展示。通过一个属性就可以控制列表的显示方向。列表有一下
+分类：
+1、垂直列表
+2、垂直图文列表
+3、水平列表
+4、动态列表
+5、矩阵式列表（网格布局）
+
+### 六、Flutter GridView 组件的常用参数
+
+当数据量很大的时候用矩阵方式排列比较清晰。此时我们可以用网格列表组件 GridView 实
+现布局。
+GridView 创建网格列表有多种方式，下面我们主要介绍两种。
+    1、可以通过 GridView.count 实现网格布局
+    2、通过 GridView.builder 实现网格布局
+
+**常用属性：**
+
+|  名称    |  类型    |   说明   |
+| ---- | ---- | ---- |
+|  scrollDirection    |    Axis   |   滚动方法   |
+|  padding    |    EdgeInsetsGeometry  |  内边距    |
+|    resolve  |   bool   |  组件反向排序    |
+|  crossAxisSpacing    |    double    |  水平子 Widget 之间间距    |
+|  mainAxisSpacing    |   double   |  垂直子 Widget 之间间距    |
+|   crossAxisCount  |  int  | 一行的 Widget 数量         |
+|    childAspectRatio  |  double   |  子 Widget 宽高比例  |
+|  children    |      |    <Widget>[ ]   |
+|  gridDelegate | SliverGridDelegateWithFix<br>edCrossAxisCount（常用）<br>SliverGridDelegateWithMax<br>CrossAxisExtent<br>  |  控制布局主要用在GridView.builder 里面    |
+
+### 七、 
+
+###  八、 
+
+
+
+
+
