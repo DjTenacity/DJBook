@@ -43,7 +43,7 @@ void main() {
 }
 ```
 
-# Container 组件、 Text 组件详解 
+# Container 组件、 Text 组件  
 
 ### 四、 Flutter   把内容单独抽离成一个组件 
 
@@ -86,10 +86,10 @@ class MyApp extends StatelessWidget{
 			child: Text( "我是 Dart 一个文本内容", 
 			textDirection: TextDirection.ltr, 
 			style:TextStyle(
-				fontSize: 40.0, 
-				fontWeight: FontWeight.bold, 
-				// color: Colors.yellow
-				color: Color.fromRGBO(255, 222, 222, 0.5)
+			fontSize: 40.0, 
+			fontWeight: FontWeight.bold, 
+			// color: Colors.yellow
+			color: Color.fromRGBO(255, 222, 222, 0.5)
 			), ), );
 	}
 }
@@ -379,7 +379,8 @@ class HomeContent extends StatelessWidget {
 'https://resources.ninghao.org/images/childhood-in-a-picture.jpg' ),
 								SizedBox(height: 16.0), 
 								Text('这是一个文本信息', 
-									textAlign: TextAlign.center, 															style: TextStyle(fontSize: 16.0
+									textAlign: TextAlign.center, 															
+									style: TextStyle(fontSize: 16.0
 								), )
 							], ),),
 					Container(
@@ -393,10 +394,7 @@ class HomeContent extends StatelessWidget {
 }
 ```
 
-
-
 ### 五、Flutter 列表组件概述
-
 Flutter 中我们可以通过 ListView 来定义
 列表项，支持垂直和水平方向展示。通过一个属性就可以控制列表的显示方向。列表有一下
 分类：
@@ -407,32 +405,148 @@ Flutter 中我们可以通过 ListView 来定义
 5、矩阵式列表（网格布局）
 
 ### 六、Flutter GridView 组件的常用参数
-
 当数据量很大的时候用矩阵方式排列比较清晰。此时我们可以用网格列表组件 GridView 实
 现布局。
 GridView 创建网格列表有多种方式，下面我们主要介绍两种。
     1、可以通过 GridView.count 实现网格布局
     2、通过 GridView.builder 实现网格布局
-
 **常用属性：**
 
-|  名称    |  类型    |   说明   |
-| ---- | ---- | ---- |
-|  scrollDirection    |    Axis   |   滚动方法   |
-|  padding    |    EdgeInsetsGeometry  |  内边距    |
-|    resolve  |   bool   |  组件反向排序    |
-|  crossAxisSpacing    |    double    |  水平子 Widget 之间间距    |
-|  mainAxisSpacing    |   double   |  垂直子 Widget 之间间距    |
-|   crossAxisCount  |  int  | 一行的 Widget 数量         |
-|    childAspectRatio  |  double   |  子 Widget 宽高比例  |
-|  children    |      |    <Widget>[ ]   |
-|  gridDelegate | SliverGridDelegateWithFix<br>edCrossAxisCount（常用）<br>SliverGridDelegateWithMax<br>CrossAxisExtent<br>  |  控制布局主要用在GridView.builder 里面    |
+| 名称             | 类型                                                         | 说明                                  |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------- |
+| scrollDirection  | Axis                                                         | 滚动方法                              |
+| padding          | EdgeInsetsGeometry                                           | 内边距                                |
+| resolve          | bool                                                         | 组件反向排序                          |
+| crossAxisSpacing | double                                                       | 水平子 Widget 之间间距                |
+| mainAxisSpacing  | double                                                       | 垂直子 Widget 之间间距                |
+| crossAxisCount   | int                                                          | 一行的 Widget 数量                    |
+| childAspectRatio | double                                                       | 子 Widget 宽高比例                    |
+| children         |                                                              | <Widget>[ ]                           |
+| gridDelegate     | SliverGridDelegateWithFix<br>edCrossAxisCount（常用）<br>SliverGridDelegateWithMax<br>CrossAxisExtent<br> | 控制布局主要用在GridView.builder 里面 |
 
-### 七、 
+## Flutter 页面布局 
 
-###  八、 
+ Paddiing Row Column Expanded 组件详解 
+
+#### **一、Flutter Paddiing 组件** 
+
+在 html 中常见的布局标签都有 padding 属性，但是 Flutter 中很多 Widget 是没有 padding 属 性。这个时候我们可以用 Padding 组件处理容器与子元素直接的间距。 
+
++ padding  --> padding值 ,Edgelnsetss设置填充的值
++ child	--> 子组件
 
 
 
+#### 二、Flutter Row 水平布局组件
+
++ mainAxisAlignment 	主轴的排序方式
++ crossAxisAlignment 	次轴的排序方式
++ children 			   组件子元素
 
 
+
+#### 三、Flutter Column 垂直布局组件
+
++ mainAxisAlignment 	主轴的排序方式
++ crossAxisAlignment 	次轴的排序方式
++ children 			  组件子元素
+
+#### 四、Flutter Expanded 类似 Web 中的 Flex布局
+
+Expanded 可以用在 Row 和 Column 布局中
+
++ flex 	  元素站整个父 Row /Column 的比例
++ child 	子元素
+
+
+
+#### 五、Flutter Stack 组件
+
+Stack 表示堆的意思，我们可以用 Stack 或者 Stack 结合 Align 或者 Stack 结合 Positiond 来实
+现页面的定位布局
+属性 说明
++ alignment 配置所有子元素的显示位置
++ children 子组件
+
+#### 六、Flutter Stack Align
+
+Stack 组件中结合 Align 组件可以控制每个子元素的显示位置
+属性 
++ alignment 配置所有子元素的显示位置
++ child 子组件
+  
+
+#### 七、Flutter Stack Positioned
+
+Stack 组件中结合 Positioned 组件也可以控制每个子元素的显示位置
++ top 子元素距离顶部的距离
++ bottom 子元素距离底部的距离
++ left  子元素距离左侧距离
++ right 子元素距离右侧距离
++ child 子组件
+
+#### 八、Flutter AspectRatio 组件
+​	AspectRatio 的作用是根据设置调整子元素 child 的宽高比。
+
+​	AspectRatio 首先会在布局限制条件允许的范围内尽可能的扩展，widget 的高度是由宽度和比率决定的，类似于 BoxFit 中的 contain，按照固定比率去尽量占满区域。
+
+​	如果在满足所有限制条件过后无法找到一个可行的尺寸，AspectRatio 最终将会去优先适应布局限制条件，而忽略所设置的比率。
+
++ aspectRatio 宽高比，最终可能不会根据这个值去布局，
+  具体则要看综合因素，外层是否允许按照这
+  种比率进行布局，这只是一个参考值
++ child 子组件
+
+
+
+#### 九、Flutter Card 组件
+
+Card 是卡片组件块，内容可以由大多数类型的 Widget 构成，Card 具有圆角和阴影，这让它看起来有立体感。
+
++ margin 外边距
++ child 子组件
++ Shape Card 的阴影效果，默认的阴影效果为圆角的长方形边。
+
+#### 十一、Flutter RaisedButton 定义一个按钮
+Flutter 中通过 RaisedButton 定义一个按钮。RaisedButton 里面有很多的参数，这一讲我们只
+是简单的进行使用。
+```dart
+return RaisedButton(
+child: Text('女装'), textColor: Theme.of(context).accentColor, onPressed: (){
+}, );
+```
+
+#### 十二、可以实现流布局的Wrap 组件
+Wrap 可以实现流布局，单行的 Wrap 跟 Row 表现几乎一致，单列的 Wrap 则跟 Row 表
+现几乎一致。但 Row 与 Column 都是单行单列的，Wrap 则突破了这个限制，mainAxis 上空
+间不足时，则向 crossAxis 上去扩展显示。
+
++ direction 主轴的方向，默认水平
++ alignment 主轴的对其方式
++ spacing 主轴方向上的间距
++ textDirection 文本方向
++ verticalDirection 定义了 children 摆放顺序，默认是 down，见Flex 相关属性介绍。
++ runAlignment run 的对齐方式。run 可以理解为新的行或者列，如果是水平方向布局的话，run 可以理解为新的一行 
++ runSpacing run 的间距
+
+### Flutter 中自定义有状态组件
+在 Flutter 中自定义组件其实就是一个类，这个类需要继承 StatelessWidget/StatefulWidget。
+
+**StatelessWidget** 是无状态组件，状态不可变的 widget
+**StatefulWidget** 是有状态组件，持有的状态可能在 widget 生命周期改变。通俗的讲：如果我们想改变页面中的数据的话这个时候就需要用到 **StatefulWidget**
+
+
+
+###  BottomNavigationBar 自定义底部导航条、以及实现页面切换
+
+BottomNavigationBar 是底部导航条，可以让我们定义底部 Tab 切换，bottomNavigationBar
+是 Scaffold 组件的参数。
+
++ items List<BottomNavigationBarItem> 底部导航条按钮集合
++ iconSize icon
++ currentIndex 默认选中第几个
++ onTap 选中变化回调函数
++ fixedColor 选中的颜色
++ type 
+  	+ BottomNavigationBarType.fixed
+	+ BottomNavigationBarType.shifting
