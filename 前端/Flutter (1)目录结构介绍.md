@@ -55,6 +55,8 @@ void main() {
 
 **StatefulWidget** 是有状态组件，持有的状态可能在 widget 生命周期改变 
 
+
+
 ```dart
 import 'package:flutter/material.dart';
 void main(){
@@ -167,16 +169,31 @@ class MyHome extends StatelessWidget{
 }
 ```
 
-### 七、**Text** **组件**
+### 七、Text组件
+
+```dart
+const Text(
+  this.data, {
+  Key key,
+  this.style,
+  this.textAlign,
+  this.softWrap,
+  this.overflow,
+  this.maxLines,
+})
+```
+
+
 
 |        名称         | 功能                                                         |
 | :-----------------: | :----------------------------------------------------------- |
 |    **textAlign**    | 文本对齐方式（center 居中，left 左 对齐，right 右对齐，justfy 两端对齐） |
 |    textDirection    | 文本方向（ltr 从左至右，rtl 从右至 左）                      |
-|    **overflow**     | 文字超出屏幕之后的处理方式（clip 裁剪，fade 渐隐，ellipsis 省略号） |
+|    **overflow**     | 文字超出屏幕之后的处理方式（默认直接截断, clip 裁剪，fade 渐隐，ellipsis 省略号） |
 | **textScaleFactor** | 字体显示倍率                                                 |
-|    **maxLines**     | 文字显示最大行数                                             |
+|    **maxLines**     | 文字显示最大行数 , 会根据`overflow`属性决定如何截断处理      |
 |      **style**      | 字体的样式设置                                               |
+|      softWrap       | 文字是否换行                                                 |
 
 **下面是 TextStyle 的参数 ：**
 
@@ -191,10 +208,36 @@ class MyHome extends StatelessWidget{
 |         fontSize            | 文字大小                                                     |
 |        color             | 文字颜色                                                     |
 | **fontWeight**      | 字体粗细（bold 粗体，normal 正常体）                         |
-     更多参数：https://docs.flutter.io/flutter/painting/TextStyle-class.html
+ 有时还会遇到富文本的需求 , 我们可以用Flutter提供的`Text.rich`构造函数来创建相应的文本组件
 
+```dart
+Text.rich(TextSpan(
+  children: [
+    TextSpan(
+      '￥',
+      style: TextStyle(
+        fontSize: 12,
+        color: Color(0xFFFF7528),
+      ),
+    ),
+    TextSpan(
+      '258',
+      style: TextStyle(
+        fontSize: 15,
+        color: Color(0xFFFF7528),
+      ),
+    ),
+  ]
+))
+```
+
+
+
+[更多参数](https://docs.flutter.io/flutter/painting/TextStyle-class.html)
 
 ### 八、**Container** **组件**
+
+![img](https://mmbiz.qpic.cn/mmbiz_png/QFjUqsncFKkDicp9pSD5drz7xmFHs5A6d5xtNbJLxOIJTVwlER4cdia4DibS3HAU5ibrv8hicLYjSzLsLvId3CeibfQw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
 | 名称          | 功能 |
 | ------------- | ---- |
@@ -208,6 +251,124 @@ class MyHome extends StatelessWidget{
 | **child** |   容器子元素   |
 
 
+
+`Container`组件是最常用的布局组件之一，可以认为它是web开发中的`div`，rn开发中的`View`。其往往可以用来控制大小、背景颜色、边框、阴影、内外边距和内容排列方式等。我们先来看下其构造函数：
+
+```dart
+Container({
+  Key key,
+  double width,
+  double height,
+  this.margin,
+  this.padding,
+  //背景颜色，等同于web/rn中的backgroundColor.. 用Color(0xFFFF0000)或Colors.red
+  Color color,
+   //用来决定Container组件的子组件将以何种方式进行排列
+  this.alignment,
+  //盒约束 , 通过minWidth/maxWidth/minHeight/maxHeight等属性来限制容器的宽高
+  BoxConstraints constraints,
+  Decoration decoration,
+  this.foregroundDecoration,
+  this.transform,
+  this.child,
+})
+```
+
+##### decoration
+
+该属性非常强大，字面意思是装饰，因为通过它你可以设置边框，阴影，渐变，圆角等常用属性。`BoxDecoration`继承自`Decoration`类，因此我们通常会生成一个`BoxDecoration`实例来设置这些属性。
+
+###### 1) 边框
+
+可以用`Border.all`构造函数直接生成4条边框，也可以用Border构造函数单独设置不同方向上的边框。不过令人惊讶的是官方提供的边框竟然不支持`虚线`（issue在这里）。
+
+```
+// 同时设置4条边框：1px粗细的黑色实线边框
+BoxDecoration(
+  border: Border.all(color: Colors.black, width: 1, style: BorderStyle.solid)
+)
+
+// 设置单边框：上边框为1px粗细的黑色实线边框，右边框为1px粗细的红色实线边框
+BoxDecoration(
+  border: Border(
+    top: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
+    right: BorderSide(color: Colors.red, width: 1, style: BorderStyle.solid),
+  ),
+)
+```
+
+###### 2) 阴影
+
+阴影属性和web中的`boxShadow`几乎没有区别，可以指定`x`，`y`，`blur`，`spread`，`color`等属性。
+
+```
+BoxDecoration(
+  boxShadow: [
+    BoxShadow(
+      offset: Offset(0, 0),
+      blurRadius: 6,
+      spreadRadius: 10,
+      color: Color.fromARGB(20, 0, 0, 0),
+    ),
+  ],
+)
+```
+
+###### 3) 渐变
+
+如果你不想容器的背景颜色是单调的，可以尝试用`gradient`属性。Flutter同时支持线性渐变和径向渐变：
+
+```
+// 从左到右，红色到蓝色的线性渐变
+BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Colors.red, Colors.blue],
+  ),
+)
+
+// 从中心向四周扩散，红色到蓝色的径向渐变
+BoxDecoration(
+  gradient: RadialGradient(
+    center: Alignment.center,
+    colors: [Colors.red, Colors.blue],
+  ),
+)
+```
+
+###### 4) 圆角
+
+通常情况下，你可能会用到`BorderRadius.circular`构造函数来同时设置4个角的圆角，或是`BorderRadius.only`构造函数来单独设置某几个角的圆角：
+
+```dart
+// 同时设置4个角的圆角为5
+BoxDecoration(
+  borderRadius: BorderRadius.circular(5),
+)
+
+// 设置单圆角：左上角的圆角为5，右上角的圆角为10
+BoxDecoration(
+  borderRadius: BorderRadius.only(
+    topLeft: Radius.circular(5),
+    topRight: Radius.circular(10),
+  ),
+)
+```
+
+##### transform
+
+`transform`属性和我们在web/rn中经常用到的基本也没有差别，主要包括：平移，缩放、旋转和倾斜。在Flutter中，封装了矩阵变换类Matrix4帮助我们进行变换：
+
+- `translationValues(x, y, z)`: 平移x, y, z；
+- `rotationX(radians)`: x轴旋转radians弧度；
+- `rotationY(radians)`: y轴旋转radians弧度；
+- `rotationZ(radians)`: z轴旋转radians弧度；
+- `skew(alpha, beta)`: x轴倾斜alpha度，y轴倾斜beta度；
+- `skewX(alpha)`: x轴倾斜alpha度；
+- `skewY(beta)`: y轴倾斜beta度；
+
+`Container`组件的属性很丰富，虽然有些用法上和web/rn有些许差异，但基本上大同小异，所以过渡起来也不会有什么障碍。另外，由于`Container`组件是单子节点组件，也就是只允许子节点有一个。所以在布局上，很多时候我们会用`Row`和`Column`组件进行`行/列`布局。
 
 
 
@@ -432,6 +593,8 @@ GridView 创建网格列表有多种方式，下面我们主要介绍两种。
 
 在 html 中常见的布局标签都有 padding 属性，但是 Flutter 中很多 Widget 是没有 padding 属 性。这个时候我们可以用 Padding 组件处理容器与子元素直接的间距。 
 
+`Row`和`Column`组件其实和web/rn中的Flex布局（弹性盒子）特别相似 , `Row`组件的主轴就是横向，`Column`组件的主轴就是纵向。且它们的构造函数十分相似
+
 + padding  --> padding值 ,Edgelnsetss设置填充的值
 + child	--> 子组件
 
@@ -439,17 +602,27 @@ GridView 创建网格列表有多种方式，下面我们主要介绍两种。
 
 #### 二、Flutter Row 水平布局组件
 
-+ mainAxisAlignment 	主轴的排序方式
-+ crossAxisAlignment 	次轴的排序方式
++ mainAxisAlignment 	主轴的排序方式 , 默认都是从start开始  从左到右
+
++ crossAxisAlignment 	次轴的排序方式   默认都是居中
+
 + children 			   组件子元素
+
++ ##### mainAxisSize   是在主轴上的尺寸 ,是包裹其内容，还是撑满其父容器。它的可选值有`MainAxisSize.min`和`MainAxisSize.max`。由于其默认值都是`MainAxisSize.max`，所以主轴方向上默认大小都是尽可能撑满父容器的
 
 
 
 #### 三、Flutter Column 垂直布局组件
 
-+ mainAxisAlignment 	主轴的排序方式
-+ crossAxisAlignment 	次轴的排序方式
-+ children 			  组件子元素
+由于`Column`组件次轴方向上（即水平）默认是居中对齐，所以水平方向上不会撑满其父容器，此时需要指定`CrossAxisAlignment.stretch`才可以
+
++ mainAxisAlignment 	主轴的排序方式  , 默认都是从start开始  从上到下
+
++ crossAxisAlignment 	次轴的排序方式  默认都是居中
+
++ children 			  组件子元素  
+
++ ##### mainAxisSize    是在主轴上的尺寸 ,是包裹其内容，还是撑满其父容器。它的可选值有`MainAxisSize.min`和`MainAxisSize.max`。由于其默认值都是`MainAxisSize.max`，所以主轴方向上默认大小都是尽可能撑满父容器的
 
 #### 四、Flutter Expanded 类似 Web 中的 Flex布局
 
@@ -463,8 +636,10 @@ Expanded 可以用在 Row 和 Column 布局中
 #### 五、Flutter Stack 组件
 
 Stack 表示堆的意思，我们可以用 Stack 或者 Stack 结合 Align 或者 Stack 结合 Positiond 来实
-现页面的定位布局
+现页面的定位布局  . Stack组件就是绝对定位的容器，`Positioned`组件通过`left`，`top`，`right`，`bottom`四个方向上的属性值来决定其在父容器中的位置。
+
 属性 说明
+
 + alignment 配置所有子元素的显示位置
 + children 子组件
 
@@ -484,6 +659,39 @@ Stack 组件中结合 Positioned 组件也可以控制每个子元素的显示�
 + left  子元素距离左侧距离
 + right 子元素距离右侧距离
 + child 子组件
+
+```dart
+Container(
+  height: 100,
+  color: Colors.yellow,
+  child: Stack(
+    children: <Widget>[
+      Positioned(
+        left: 10,
+        top: 10,
+        child: Container(width: 10, height: 10, color: Colors.red),
+      ),
+      Positioned(
+        right: 10,
+        top: 10,
+        child: Container(width: 10, height: 10, color: Colors.red),
+      ),
+      Positioned(
+        left: 10,
+        bottom: 10,
+        child: Container(width: 10, height: 10, color: Colors.red),
+      ),
+      Positioned(
+        right: 10,
+        bottom: 10,
+        child: Container(width: 10, height: 10, color: Colors.red),
+      ),
+    ],
+  ),
+)
+```
+
+
 
 #### 八、Flutter AspectRatio 组件
 ​	AspectRatio 的作用是根据设置调整子元素 child 的宽高比。
