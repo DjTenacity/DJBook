@@ -1,4 +1,8 @@
-# **Flutter** **目录结构介绍**
+#  Flutter   目录结构介绍及入门
+
+[部分参考](https://mp.weixin.qq.com/s?__biz=MzIxMTg5NjQyMA==&mid=2247485542&idx=1&sn=50eb6af8ab777f921671d61348eefe70&chksm=974f196da038907bd855b22386c169c7b5fbf2a91bfacdab2e8d07a4a4ec9fffe175d36fcb55&mpshare=1&scene=1&srcid=&key=273f0e6221a1571ce05b57ee7de8878a1333859e12aca83730b21513b49ad37cb80342071fb828566b686e56514b67375ac5c5b0ce31fe00c046f7d1fe2acd1df3d4fd47484216612656313948f8b939&ascene=1&uin=OTQyMTg1MzE1&devicetype=Windows+10&version=62060833&lang=zh_CN&pass_ticket=vjtAv3D03llfrVwfXQch6Pn1v%2BKlTaVQqhjBsfiTF%2B7JhkMoFtIeFVW4CwfJjUrM)
+
+Flutter的嵌套真的很难受 , 如果不对UI布局进行模块拆分，那绝对是噩梦般的体验。而且不像web/rn开发样式可以单独抽离，Flutter这种将样式当做属性的处理方式，一眼看去真的很难理清dom结构，对于新接手代码的开发人员而言，需要费点时间理解。 
 
 ###  一、Flutter目录结构介绍
 
@@ -43,7 +47,7 @@ void main() {
 }
 ```
 
-# Container 组件、 Text 组件  
+# 
 
 ### 四、 Flutter   把内容单独抽离成一个组件 
 
@@ -169,12 +173,14 @@ class MyHome extends StatelessWidget{
 }
 ```
 
-### 七、Text组件
+## Container 组件、 Text 组件  
+
+### Text组件
 
 ```dart
 const Text(
-  this.data, {
-  Key key,
+  this.data, //显示的文本信息
+{ Key key,
   this.style,
   this.textAlign,
   this.softWrap,
@@ -192,7 +198,7 @@ const Text(
 |    **overflow**     | 文字超出屏幕之后的处理方式（默认直接截断, clip 裁剪，fade 渐隐，ellipsis 省略号） |
 | **textScaleFactor** | 字体显示倍率                                                 |
 |    **maxLines**     | 文字显示最大行数 , 会根据`overflow`属性决定如何截断处理      |
-|      **style**      | 字体的样式设置                                               |
+|      **style**      | 文本样式 , Flutter提供了一个`TextStyle`类，最常用的`fontSize`，`fontWeight`，`color`，`backgroundColor`和`shadows`等属性都是通过它设置的； |
 |      softWrap       | 文字是否换行                                                 |
 
 **下面是 TextStyle 的参数 ：**
@@ -235,7 +241,7 @@ Text.rich(TextSpan(
 
 [更多参数](https://docs.flutter.io/flutter/painting/TextStyle-class.html)
 
-### 八、**Container** **组件**
+### Container 组件
 
 ![img](https://mmbiz.qpic.cn/mmbiz_png/QFjUqsncFKkDicp9pSD5drz7xmFHs5A6d5xtNbJLxOIJTVwlER4cdia4DibS3HAU5ibrv8hicLYjSzLsLvId3CeibfQw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
@@ -274,11 +280,25 @@ Container({
 })
 ```
 
-##### decoration
+#### transform
+
+`transform`属性和我们在web/rn中经常用到的基本也没有差别，主要包括：平移，缩放、旋转和倾斜。在Flutter中，封装了矩阵变换类Matrix4帮助我们进行变换：
+
+- `translationValues(x, y, z)`: 平移x, y, z；
+- `rotationX(radians)`: x轴旋转radians弧度；
+- `rotationY(radians)`: y轴旋转radians弧度；
+- `rotationZ(radians)`: z轴旋转radians弧度；
+- `skew(alpha, beta)`: x轴倾斜alpha度，y轴倾斜beta度；
+- `skewX(alpha)`: x轴倾斜alpha度；
+- `skewY(beta)`: y轴倾斜beta度；
+
+
+
+#### decoration
 
 该属性非常强大，字面意思是装饰，因为通过它你可以设置边框，阴影，渐变，圆角等常用属性。`BoxDecoration`继承自`Decoration`类，因此我们通常会生成一个`BoxDecoration`实例来设置这些属性。
 
-###### 1) 边框
+##### 1) 边框
 
 可以用`Border.all`构造函数直接生成4条边框，也可以用Border构造函数单独设置不同方向上的边框。不过令人惊讶的是官方提供的边框竟然不支持`虚线`（issue在这里）。
 
@@ -297,7 +317,7 @@ BoxDecoration(
 )
 ```
 
-###### 2) 阴影
+##### 2) 阴影
 
 阴影属性和web中的`boxShadow`几乎没有区别，可以指定`x`，`y`，`blur`，`spread`，`color`等属性。
 
@@ -314,7 +334,7 @@ BoxDecoration(
 )
 ```
 
-###### 3) 渐变
+##### 3) 渐变
 
 如果你不想容器的背景颜色是单调的，可以尝试用`gradient`属性。Flutter同时支持线性渐变和径向渐变：
 
@@ -337,7 +357,7 @@ BoxDecoration(
 )
 ```
 
-###### 4) 圆角
+##### 4) 圆角
 
 通常情况下，你可能会用到`BorderRadius.circular`构造函数来同时设置4个角的圆角，或是`BorderRadius.only`构造函数来单独设置某几个角的圆角：
 
@@ -356,18 +376,6 @@ BoxDecoration(
 )
 ```
 
-##### transform
-
-`transform`属性和我们在web/rn中经常用到的基本也没有差别，主要包括：平移，缩放、旋转和倾斜。在Flutter中，封装了矩阵变换类Matrix4帮助我们进行变换：
-
-- `translationValues(x, y, z)`: 平移x, y, z；
-- `rotationX(radians)`: x轴旋转radians弧度；
-- `rotationY(radians)`: y轴旋转radians弧度；
-- `rotationZ(radians)`: z轴旋转radians弧度；
-- `skew(alpha, beta)`: x轴倾斜alpha度，y轴倾斜beta度；
-- `skewX(alpha)`: x轴倾斜alpha度；
-- `skewY(beta)`: y轴倾斜beta度；
-
 `Container`组件的属性很丰富，虽然有些用法上和web/rn有些许差异，但基本上大同小异，所以过渡起来也不会有什么障碍。另外，由于`Container`组件是单子节点组件，也就是只允许子节点有一个。所以在布局上，很多时候我们会用`Row`和`Column`组件进行`行/列`布局。
 
 
@@ -375,6 +383,34 @@ BoxDecoration(
 # Flutter图片组件
 
 ### 一、Flutter  图片组件 
+
+```dart
+Image({
+  Key key,
+    /***最常用到主要有两种（AssetImage和NetworkImage）。使用AssetImage之前，需要在pubspec.yaml文件中声明好图片资源，然后才能使用；而NextworkImage指定图片的网络地址即可，主要是在加载一些网络图片时会用到**/
+  @required this.image,
+  this.width,
+  this.height,
+  // 图片的背景颜色，当网络图片未加载完毕之前，会显示该背景颜色；
+  this.color,
+  this.fit,
+  this.repeat = ImageRepeat.noRepeat,
+})
+//mage.network和Image.asset构造函数，其实是语法糖。比如下方的两段代码结果是完全一样的：
+Image(
+  image: NetworkImage('https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1402367109,4157195964&fm=27&gp=0.jpg'),
+  width: 100,
+  height: 100,
+)
+
+Image.network(
+  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1402367109,4157195964&fm=27&gp=0.jpg',
+  width: 100,
+  height: 100,
+)
+```
+
+ 
 
 图片组件是显示图像的组件，Image 组件有很多构造函数，这里我们只给大家讲两个
 Image.asset， 本地图片
@@ -386,8 +422,8 @@ Image.network 远程图片
 | ---- | ---- | ---- |
 |   alignment   |  Alignment    |   图片的对齐方式   |
 |   color 和 colorBlendMode   |      | 设置图片的背景颜色，通常和 colorBlendMode 配合使用，这样可以是图片颜色和背景色混合。上面的图是进行了颜色的混合，绿色背景和图片红色的混合 |
-| fit | BoxFit | fit 属性用来控制图片的拉伸和挤压，这都是根据父容器来的。<br/>BoxFit.fill:全图显示，图片会被拉伸，并充满父容器。<br/>BoxFit.contain:全图显示，显示原比例，可能会有空隙。<br/>BoxFit.cover：显示可能拉伸，可能裁切，充满（图片要充满整个容器，还不变形）。<br/>BoxFit.fitWidth：宽度充满（横向充满），显示可能拉伸，<br/>可能裁切。<br/>BoxFit.fitHeight ：高度充满（竖向充满）,显示可能拉<br/>伸，可能裁切。<br/>BoxFit.scaleDown：效果和 contain 差不多，但是此属性不允许显示超过源图片大小，可小不可大。 |
-|   repeat   |   平铺   | ImageRepeat.repeat : 横向和纵向都进行重复，直到铺满整个画布<br/>ImageRepeat.repeatX: 横向重复，纵向不重复。<br/>ImageRepeat.repeatY：纵向重复，横向不重复。 |
+| fit | BoxFit | fit 属性用来控制图片的拉伸和挤压，这都是根据父容器来的。<br/>BoxFit.fill:全图显示，图片会被拉伸，并充满父容器。<br/>BoxFit.contain:全图显示，显示原比例，可能会有空隙。<br/>BoxFit.cover：显示可能拉伸，可能裁切，充满（图片要充满整个容器，还不变形）。<br/>BoxFit.fitWidth：宽度充满（横向充满），显示可能拉伸，可能裁切。<br/>BoxFit.fitHeight ：高度充满（竖向充满）,显示可能拉伸，可能裁切。<br/>BoxFit.scaleDown：效果和 contain 差不多，但是此属性不允许显示超过源图片大小，可小不可大。 |
+|   repeat   |   平铺   | 决定当图片实际大小不足指定大小时是否使用重复效果<br>ImageRepeat.repeat : 横向和纵向都进行重复，直到铺满整个画布<br/>ImageRepeat.repeatX: 横向重复，纵向不重复。<br/>ImageRepeat.repeatY：纵向重复，横向不重复。 |
 | width | 宽度 | 一般结合 ClipOval 才能看到效果 |
 |  height    |   高度   |  一般结合 ClipOval 才能看到效果    |
 
@@ -457,7 +493,24 @@ thumb_img/1101_thumb_G_1557845381862.jpg",
 ), );
 ```
 
+### 四、Icon(图标组件)
 
+![img](https://mmbiz.qpic.cn/mmbiz_png/QFjUqsncFKkDicp9pSD5drz7xmFHs5A6dOfSbWharfPom1Cot4RDdNtXYfkDLibiadOKV9JuloLlCEdHqHrt2bc7g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+`Icon`图标组件相比于图片有着放大不会失真的优势，在日常开发中也是经常会被用到。Flutter更是直接内置了一套`Material`风格的图标（你可以在这里预览所有的图标类型）。看下构造函数：
+
+```dart
+const Icon(
+  this.icon, {
+  Key key,
+  this.size,
+  this.color,
+})
+```
+
+- `icon`: 图标类型；
+- `size`: 图标大小；
+- `color`: 图标颜色。
 
 # ListView 基础列表组件、水平列表组件、图标组件
 
@@ -635,15 +688,14 @@ Expanded 可以用在 Row 和 Column 布局中
 
 #### 五、Flutter Stack 组件
 
-Stack 表示堆的意思，我们可以用 Stack 或者 Stack 结合 Align 或者 Stack 结合 Positiond 来实
-现页面的定位布局  . Stack组件就是绝对定位的容器，`Positioned`组件通过`left`，`top`，`right`，`bottom`四个方向上的属性值来决定其在父容器中的位置。
+Stack 表示堆的意思，我们可以用 Stack 或者 Stack 结合 Align 或者 Stack 结合 Positiond 来实现页面的定位布局  绝对定位布局在web/rn开发中也是使用频率较高的一种布局方式，Flutter也提供了相应的组件实现，需要将`Stack`和`Positioned`组件搭配在一起使用 . Stack组件就是绝对定位的容器
 
 属性 说明
 
 + alignment 配置所有子元素的显示位置
 + children 子组件
 
-#### 六、Flutter Stack Align
+##### Stack Align
 
 Stack 组件中结合 Align 组件可以控制每个子元素的显示位置
 属性 
@@ -651,9 +703,12 @@ Stack 组件中结合 Align 组件可以控制每个子元素的显示位置
 + child 子组件
   
 
-#### 七、Flutter Stack Positioned
+##### Stack Positioned
 
 Stack 组件中结合 Positioned 组件也可以控制每个子元素的显示位置
+
+Stack组件就是绝对定位的容器，`Positioned`组件通过`left`，`top`，`right`，`bottom`四个方向上的属性值来决定其在父容器中的位置。
+
 + top 子元素距离顶部的距离
 + bottom 子元素距离底部的距离
 + left  子元素距离左侧距离
@@ -693,7 +748,7 @@ Container(
 
 
 
-#### 八、Flutter AspectRatio 组件
+#### 六、Flutter AspectRatio 组件
 ​	AspectRatio 的作用是根据设置调整子元素 child 的宽高比。
 
 ​	AspectRatio 首先会在布局限制条件允许的范围内尽可能的扩展，widget 的高度是由宽度和比率决定的，类似于 BoxFit 中的 contain，按照固定比率去尽量占满区域。
@@ -707,7 +762,7 @@ Container(
 
 
 
-#### 九、Flutter Card 组件
+#### 七、Flutter Card 组件
 
 Card 是卡片组件块，内容可以由大多数类型的 Widget 构成，Card 具有圆角和阴影，这让它看起来有立体感。
 
@@ -715,7 +770,7 @@ Card 是卡片组件块，内容可以由大多数类型的 Widget 构成，Card
 + child 子组件
 + Shape Card 的阴影效果，默认的阴影效果为圆角的长方形边。
 
-#### 十一、Flutter RaisedButton 定义一个按钮
+#### 八、Flutter RaisedButton 定义按钮
 Flutter 中通过 RaisedButton 定义一个按钮。RaisedButton 里面有很多的参数，这一讲我们只
 是简单的进行使用。
 ```dart
@@ -724,7 +779,7 @@ child: Text('女装'), textColor: Theme.of(context).accentColor, onPressed: (){
 }, );
 ```
 
-#### 十二、可以实现流布局的Wrap 组件
+#### 九、可以实现流布局的Wrap 组件
 Wrap 可以实现流布局，单行的 Wrap 跟 Row 表现几乎一致，单列的 Wrap 则跟 Row 表
 现几乎一致。但 Row 与 Column 都是单行单列的，Wrap 则突破了这个限制，mainAxis 上空
 间不足时，则向 crossAxis 上去扩展显示。
@@ -737,7 +792,7 @@ Wrap 可以实现流布局，单行的 Wrap 跟 Row 表现几乎一致，单列�
 + runAlignment run 的对齐方式。run 可以理解为新的行或者列，如果是水平方向布局的话，run 可以理解为新的一行 
 + runSpacing run 的间距
 
-### Flutter 中自定义有状态组件
+## Flutter 中自定义有状态组件
 在 Flutter 中自定义组件其实就是一个类，这个类需要继承 StatelessWidget/StatefulWidget。
 
 **StatelessWidget** 是无状态组件，状态不可变的 widget
@@ -745,7 +800,7 @@ Wrap 可以实现流布局，单行的 Wrap 跟 Row 表现几乎一致，单列�
 
 
 
-###  BottomNavigationBar 自定义底部导航条、以及实现页面切换
+##  BottomNavigationBar 自定义底部导航条、以及实现页面切换
 
 BottomNavigationBar 是底部导航条，可以让我们定义底部 Tab 切换，bottomNavigationBar
 是 Scaffold 组件的参数。
