@@ -118,25 +118,23 @@ FLUSH PRIVILEGES; #刷新权限
 
 
 
-create user ‘lovedj’@‘localhost’ identified by ‘123’; --->有错
-
-create user loveDJ3 @ localhost identified by "jianchi1314"; --->有错
-
-create user lovedj @ ‘localhost’ identified by "123";--->有错
-
-create user loveDJ3 @ localhost identified by "jianchi1314"; --->有错
+```mysql
+create user ‘lovedj’@‘localhost’ identified by ‘123’; #--->有错
+create user loveDJ3 @ localhost identified by "jianchi1314";  #--->有错
+create user lovedj @ ‘localhost’ identified by "123"; #--->有错
+create user loveDJ3 @ localhost identified by "jianchi1314";  #--->有错
 
 
+create user lovedj @'%' identified by 'jianchi1314'; # 粗暴省事不安全
 
-create user lovedj @'%' identified by 'jianchi1314'; ---->粗暴省事不安全
+grant all privileges on *.* to lovedj@"%";    		# 直接超级权限  粗暴有用不安全
 
-grant all privileges on *.* to lovedj@"%";    				--->直接超级权限  粗暴有用不安全
-
-delete from user where user='loveDJ';
-
-
-
+delete from user where user='loveDJ';				# 粗暴省事不安全
 ```
+
+navicat  2054 :
+
+```mysql
 # 选择数据库
 use mysql; 
 select user,plugin from user where user ='root';
@@ -149,5 +147,17 @@ ALTER USER'lovedj '@'%' IDENTIFIED WITH mysql_native_password BY 'jianchi1314';
 
 # 刷新权限：
 FLUSH PRIVILEGES;
+```
+
+
+
+```mysql
+# 创建DjGoShop数据库  mysql默认小写 
+
+net start mysql
+mysql -u lovedj -p
+create database DjGoShop charset=utf8;
+use DjGoShop;
+show databases;
 ```
 

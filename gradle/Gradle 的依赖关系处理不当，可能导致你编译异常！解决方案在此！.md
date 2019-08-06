@@ -144,6 +144,18 @@ dependencies {
 
 ![img](https://user-gold-cdn.xitu.io/2018/4/3/162898f440eb76d9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
+**3 、除了删除冲突包外，我们还可以用Gradle的 exclude group 将指定的包名排除到编译范围外：**
+
+```
+//bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务，以下是最新的bmob-sdk:
+   implementation ('cn.bmob.android:bmob-sdk:3.5.5'){ // gson-2.6.2
+        exclude group: 'com.squareup.okhttp3'
+        exclude group: 'com.squareup.okio'
+        exclude group: 'com.google.code.gson'
+//        exclude(module: 'gson')     // 防止版本冲突
+    } 
+```
+
 
 
 大部分时候 Gradle 会正确解决依赖关系。而了解了 Gradle 的依赖关系，我想遇到这样的问题我们应该更清楚如何去解决它。
