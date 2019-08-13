@@ -62,9 +62,38 @@ public static String ToDBC(String input) {
             //do something
         }
     },initialDelay,period, TimeUnit.HOURS);
-5 基本常量类型，都是值传递
+#### 5 基本常量类型，都是值传递
 
 **依赖冲突**
  compile ('第三方库' ,{
         exclude group: 'com.google.gson'
     })
+
+或者
+
+android {
+        configurations.all {
+        // To resolve the conflict for com.android.databinding:library:1.3.1
+        // dependency on support-v4:21.0.3        
+        resolutionStrategy.force 'com.android.support:support-v4:27.0.2'
+    }
+}
+
+
+
+
+
+#### 6 Manifest[问题总结](https://www.jianshu.com/p/ea687b0fb955)：Error:Execution failed for task ':app:processDebugManifest'. > Manifest merger faile...
+
+##### 1:see logs
+
+Manifest的错误，后来才发现Manifest的错误是需要通过打开`AndroidManifest.xml`文件自己寻找问题的……
+
+##### 2:多个FileProvider冲突的问题
+
+原链接：https://www.jianshu.com/p/199872d3204f
+ 当应用中存在多个FileProvider的时候（比如在引入了一个第三方开源，例takePhoto，开源框架为了适配android7.0文件的访问也使用了FileProvider），在编译时便会报错：
+
+在报了错误信息之后androidStudio也给出了一个解决方法，增加 tools:replace="android:authorities"属性，这么一来编译时通过了，但是在使用takePhoto的时候却出现了致命错误UndeclaredThrowableException；
+
+此时我们就会想到使用自定义的FileProvider来避免冲突，既自己写一个FileProvider继承自android.support.v4.content.FileProvider，然后在清单文件里完成配置；特别要注意一点（被这个细节小坑了一下），在配置自定义的FileProvider的时候，resource指向的xml一定要保证唯一，比如takePhoto使用了最原始的命名file_paths.xml，那么自定义的FileProvider需要用另一个xml配置（比如file_paths1.xml），避免takePhoto使用的异常（压缩图片失败等问题）

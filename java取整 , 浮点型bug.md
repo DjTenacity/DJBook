@@ -20,7 +20,7 @@ float b = 0.9f - 0.8f;
 
 a==b ?
 
-![](C:\Users\admin\Desktop\DJGitBook\img\float.png)
+![](D:\DJGitBook\img\float.png)
 
 java里面。浮点计算都会用BigDecimal。 或者一般折扣系数，金额。后台设计里面都是用整数。
 
@@ -28,7 +28,7 @@ java里面。浮点计算都会用BigDecimal。 或者一般折扣系数，金�
 
 价格用分做单位。
 
-![](C:\Users\admin\Desktop\DJGitBook\img\float2.jpg)
+![](D:\DJGitBook\img\float2.jpg)
 
 float 和 double  需要转成了二进制计算的  
 
