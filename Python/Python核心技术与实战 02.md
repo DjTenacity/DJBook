@@ -290,3 +290,43 @@ sorted(s) # 对集合的元素进行升序排序
 ### 字典和集合性能
 
 典和集合是进行过性能高度优化的数据结构，特别是对于查找、添加和删除操作
+
+
+
+```python
+def find_product_price(products, product_id):
+    for id, price in products:
+        if id == product_id:
+            return price
+    return None 
+     
+products = [
+    (143121312, 100), 
+    (432314553, 30),
+    (32421912367, 150) 
+]
+ 
+print('The price of product 432314553 is {}'.format(find_product_price(products, 432314553)))
+ 
+# 输出
+The price of product 432314553 is 30
+```
+
+
+
+假设列表有 n 个元素，而查找的过程要遍历列表，那么时间复杂度就为 O(n)。即使我们先对列表进行排序，然后使用二分查找，也会需要 O(logn) 的时间复杂度，更何况，列表的排序还需要 O(nlogn) 的时间。
+
+但如果我们用字典来存储这些数据，那么查找就会非常便捷高效，只需 O(1) 的时间复杂度就可以完成。原因也很简单，刚刚提到过的，**字典的内部组成是一张哈希表，你可以直接通过键的哈希值，找到其对应的值。**
+
+```python
+products = {
+  143121312: 100,
+  432314553: 30,
+  32421912367: 150
+}
+print('The price of product 432314553 is {}'.format(products[432314553])) 
+ 
+# 输出
+The price of product 432314553 is 30
+```
+
