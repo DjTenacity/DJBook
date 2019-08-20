@@ -318,6 +318,10 @@ The price of product 432314553 is 30
 
 但如果我们用字典来存储这些数据，那么查找就会非常便捷高效，只需 O(1) 的时间复杂度就可以完成。原因也很简单，刚刚提到过的，**字典的内部组成是一张哈希表，你可以直接通过键的哈希值，找到其对应的值。**
 
+
+
+给定某件商品的 ID，我们**要找出其价格**。
+
 ```python
 products = {
   143121312: 100,
@@ -330,3 +334,157 @@ print('The price of product 432314553 is {}'.format(products[432314553]))
 The price of product 432314553 is 30
 ```
 
+现在需求变成，要找出这些**商品有多少种不同的价格**
+
+
+
+如果还是选择使用列表，对应的代码如下，其中，A 和 B 是两层循环。同样假设原始列表有 n 个元素，那么，在最差情况下，需要 O(n^2) 的时间复杂度。
+
+```python
+# list version
+def find_unique_price_using_list(products):
+    unique_price_list = []
+    for _, price in products: # A
+        if price not in unique_price_list: #B
+            unique_price_list.append(price)
+    return len(unique_price_list)
+ 
+products = [
+    (143121312, 100), 
+    (432314553, 30),
+    (32421912367, 150),
+    (937153201, 30)
+]
+print('number of unique price is: {}'.format(find_unique_price_using_list(products)))
+ 
+# 输出
+number of unique price is: 3
+```
+
+但如果我们选择使用集合这个数据结构，由于集合是高度优化的哈希表，里面元素不能重复，并且其添加和查找操作只需 O(1) 的复杂度，那么，总的时间复杂度就只有 O(n)
+
+```python
+# set version
+def find_unique_price_using_set(products):
+    unique_price_set = set()
+    for _, price in products:
+        unique_price_set.add(price)
+    return len(unique_price_set)        
+ 
+products = [
+    (143121312, 100), 
+    (432314553, 30),
+    (32421912367, 150),
+    (937153201, 30)
+]
+print('number of unique price is: {}'.format(find_unique_price_using_set(products)))
+ 
+# 输出
+number of unique price is: 3
+```
+
+
+
+下面的代码，初始化了含有 100,000 个元素的产品，并分别计算了使用列表和集合来统计产品价格数量的运行时间：
+
+```python
+import time
+id = [x for x in range(0, 100000)]
+price = [x for x in range(200000, 300000)]
+products = list(zip(id, price))
+ 
+# 计算列表版本的时间
+start_using_list = time.perf_counter()
+find_unique_price_using_list(products)
+end_using_list = time.perf_counter()
+print("time elapse using list: {}".format(end_using_list - start_using_list))
+## 输出
+time elapse using list: 41.61519479751587
+ 
+# 计算集合版本的时间
+start_using_set = time.perf_counter()
+find_unique_price_using_set(products)
+end_using_set = time.perf_counter()
+print("time elapse using set: {}".format(end_using_set - start_using_set))
+# 输出
+time elapse using set: 0.008238077163696289
+```
+
+以看到，仅仅十万的数据量，两者的速度差异就如此之大。
+
+### 字典和集合的工作原理
+
+通过举例以及与列表的对比，看到了字典和集合操作的高效性。不过，字典和集合为什么能够如此高效，特别是查找、插入和删除操作？
+
+这当然和字典、集合内部的数据结构密不可分。不同于其他数据结构，字典和集合的内部结构都是一张哈希表。
+
+- 对于字典而言，这张表存储了哈希值（hash）、键和值这 3 个元素。
+- 而对集合来说，区别就是哈希表内没有键和值的配对，只有单一的元素了。
+
+老版本 Python 的哈希表结构如下所示：
+
+```
+--+-------------------------------+
+  | 哈希值 (hash)  键 (key)  值 (value)
+--+-------------------------------+
+0 |    hash0      key0    value0
+--+-------------------------------+
+1 |    hash1      key1    value1
+--+-------------------------------+
+2 |    hash2      key2    value2
+--+-------------------------------+
+. |           ...
+__+_______________________________+
+ 
+
+```
+
+不难想象，随着哈希表的扩张，它会变得越来越稀疏。举个例子，比如我有这样一个字典：`{'name': 'mike', 'dob': '1999-01-01', 'gender': 'male'}`
+
+它会存储为类似下面的形式：
+
+```
+entries = [
+['--', '--', '--']
+[-230273521, 'dob', '1999-01-01'],
+['--', '--', '--'],
+['--', '--', '--'],
+[1231236123, 'name', 'mike'],
+['--', '--', '--'],
+[9371539127, 'gender', 'male']
+]
+```
+
+这样的设计结构显然非常浪费存储空间。为了提高存储空间的利用率，现在的哈希表除了字典本身的结构，会把索引和哈希值、键、值单独分开，也就是下面这样新的结构：
+
+```
+Indices
+----------------------------------------------------
+None | index | None | None | index | None | index ...
+----------------------------------------------------
+ 
+Entries
+--------------------
+hash0   key0  value0
+---------------------
+hash1   key1  value1
+---------------------
+hash2   key2  value2
+---------------------
+        ...
+---------------------
+```
+
+在新的哈希表结构下的存储形式，就会变成下面这样：
+
+```
+indices = [None, 1, None, None, 0, None, 2]
+entries = [
+[1231236123, 'name', 'mike'],
+[-230273521, 'dob', '1999-01-01'],
+[9371539127, 'gender', 'male']
+]
+
+```
+
+可以很清晰地看到，空间利用率得到很大的提高。
