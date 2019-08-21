@@ -97,3 +97,46 @@ Manifest的错误，后来才发现Manifest的错误是需要通过打开`Androi
 在报了错误信息之后androidStudio也给出了一个解决方法，增加 tools:replace="android:authorities"属性，这么一来编译时通过了，但是在使用takePhoto的时候却出现了致命错误UndeclaredThrowableException；
 
 此时我们就会想到使用自定义的FileProvider来避免冲突，既自己写一个FileProvider继承自android.support.v4.content.FileProvider，然后在清单文件里完成配置；特别要注意一点（被这个细节小坑了一下），在配置自定义的FileProvider的时候，resource指向的xml一定要保证唯一，比如takePhoto使用了最原始的命名file_paths.xml，那么自定义的FileProvider需要用另一个xml配置（比如file_paths1.xml），避免takePhoto使用的异常（压缩图片失败等问题）
+
+
+
+#### 7卸载那些你想卸载又不能卸载的系统预置的 APP。
+
+```
+adb shell pm uninstall [-k] [--user USER_ID] 包名
+```
+
+参数说明：
+
+- -k    卸载应用且保留数据与缓存，如果不加 -k 则全部删除。
+- --user 指定用户 id，Android 系统支持多个用户，默认用户只有一个，id=0。
+
+可以用这个命令，user 和 debug 版本都可以用，所有应用都能卸载掉，是不是有点狠，不过，我喜欢。
+
+比如这里卸载 360 浏览器：
+
+```
+adb shell pm uninstall -k --user 0 com.qihoo.browser
+```
+
+看到 Success 字样，代表卸载成功。
+
+**1、我想卸载某个应用，但不知道这个应用包名？**
+
+也分享下，打开应用，执行如下命令：
+
+```
+adb shell dumpsys window | grep mCurrentFocus
+```
+
+返回：
+
+```
+mCurrentFocus=Window{38a8f240 u0 com.qihoo.browser/com.qihoo.browser.BrowserActivity}
+```
+
+能看到包名和当前页面类名，完美。
+
+**2、我把一些系统应用卸载了，怎么恢复？**
+
+黑科技虽好，但也不要把那些必要的应用给卸载了，如电话，如果真的冲动卸载了，可以通过恢复出厂设置方式恢复，问题不大，不要慌。
