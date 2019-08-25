@@ -592,6 +592,135 @@ def calculate_similarity(item1, item2):
     """
 ```
 
-常见的的转义字符
+#### 常见的的转义字符
 
 ![](D:\DJGitBook\img\python\常见的的转义字符.png)
+
+```python
+s = 'a\nb\tc'
+print(s)
+a
+b	c
+# 打印出来的输出，就是字符 a，换行，字符 b，然后制表符，最后打印字符 c
+len(s)
+5
+# 整个字符串 s 仍然只有 5 个元素。
+```
+
+可以把字符串想象成一个由单个字符组成的数组，所以，Python 的字符串同样支持索引，切片和遍历等等
+
+```python
+name = 'jason'
+name[0]
+'j'
+name[1:3]
+'as'
+
+for char in name:
+    print(char)   
+```
+
+Python 的字符串是不可变的
+
+```python
+s = 'hello'
+s[0] = 'H'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object does not support item assignment
+
+```
+
+
+
+Python 中字符串的改变，通常只能通过创建新的字符串来完成。
+
+```python
+s = 'H' + s[1:]
+s = s.replace('h', 'H')
+# 第一种方法，是直接用大写的'H'，通过加号'+'操作符，与原字符串切片操作的子字符串拼接而成新的字符串。
+# 第二种方法，是直接扫描原字符串，把小写的'h'替换成大写的'H'，得到新的字符串。
+```
+
+Java，有可变的字符串类型，比如 StringBuilder，每次添加、改变或删除字符（串），无需创建新的字符串，时间复杂度仅为 O(1)。这样就大大提高了程序的运行效率。
+
+```python
+str1 += str2  # 表示 str1 = str1 + str2
+
+```
+
+自从 Python2.5 开始，每次处理字符串的拼接操作时（str1 += str2），Python 首先会检测 str1 还**有没有其他的引用**。如果没有的话，就会尝试原地**扩充字符串 buffer 的大小**，而不是重新分配一块内存来创建新的字符串并拷贝。
+
+以后在写程序遇到字符串拼接时，如果使用’+='更方便，就放心地去用吧，不用过分担心效率问题了。
+
+字符串拼接问题，除了使用加法操作符，我们还可以使用字符串内置的 join 函数。string.join(iterable)，表示把每个元素都按照指定的格式连接起来。
+
+```python
+l = []
+for n in range(0, 100000):
+    l.append(str(n))
+l = ' '.join(l) 
+```
+
+列表的 append 操作是 O(1) 复杂度，字符串同理。因此，这个含有 for 循环例子的时间复杂度为 n*O(1)=O(n)。
+
+#### 分割函数 split()
+
+- string.strip(str)，表示去掉首尾的 str 字符串；
+- string.lstrip(str)，表示只去掉开头的 str 字符串；
+- string.rstrip(str)，表示只去掉尾部的 str 字符串。
+
+## 字符串的格式化
+
+  string.format()，就是所谓的格式化函数；而大括号{}就是所谓的格式符，用来为后面的真实值——变量 name 预留位置。
+
+```python
+print('no data available for person with id: {}, name: {}'.format(id, name))
+# 如果id = '123'、name='jason'
+# 输出'no data available for person with id: 123, name: jason'
+
+```
+
+
+
+string.format() 是最新的字符串格式函数与规范。自然，我们还有其他的表示方法，比如在 Python 之前版本中，字符串格式化通常用 % 来表示，那么上述的例子，就可以写成下面这样：
+
+```python
+print('no data available for person with id: %s, name: %s' % (id, name))
+```
+
+
+
+写程序时， 推荐使用 format 函数，毕竟这是最新规范，也是官方文档推荐的规范。
+
+## 总结
+
+- Python 中字符串使用单引号、双引号或三引号表示，三者意义相同，并没有什么区别。其中，三引号的字符串通常用在多行字符串的场景。
+- Python 中字符串是不可变的（前面所讲的新版本 Python 中拼接操作’+='是个例外）。因此，随意改变字符串中字符的值，是不被允许的。
+- Python 新版本（2.5+）中，字符串的拼接变得比以前高效了许多，你可以放心使用。
+- Python 中字符串的格式化（string.format）常常用在输出、日志的记录等场景。
+
+
+
+## 思考题
+
+在新版本的 Python（2.5+）中，下面的两个字符串拼接操作，你觉得哪个更优呢？
+
+```python
+s = ''
+for n in range(0, 100000):
+    s += str(n)
+l = []
+****
+for n in range(0, 100000):
+    l.append(str(n))
+    
+s = ' '.join(l)
+```
+
+关于思考题，如果字符串拼接的次数较少，比如range(100)，那么方法一更优，因为时间复杂度精确的来说第一种是O(n)，第二种是O(2n)，如果拼接的次数较多，比如range(1000000)，方法二稍快一些，虽然方法二会遍历两次，但是join的速度其实很快，列表append和join的开销要比字符串+=小一些。
+
+
+
+个人提一个更加pythonic，更加高效的办法
+s = " ".join(map(str, range(0, 10000)))*
