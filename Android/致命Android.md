@@ -62,9 +62,9 @@ public static String ToDBC(String input) {
             //do something
         }
     },initialDelay,period, TimeUnit.HOURS);
-#### 5 基本常量类型，都是值传递
+#### 5   **依赖冲突 **    基本常量类型，都是值传递
 
-**依赖冲突**
+
  compile ('第三方库' ,{
         exclude group: 'com.google.gson'
     })
