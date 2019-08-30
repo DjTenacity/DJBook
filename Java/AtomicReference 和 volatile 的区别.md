@@ -2,16 +2,21 @@
 
 首先volatile是java中关键字用于修饰变量，AtomicReference是并发包java.util.concurrent.atomic下的类。
 首先volatile作用，当一个变量被定义为volatile之后，看做“程度较轻的 synchronized”，具备两个特性：
-1.保证此变量对所有线程的可见性(当一条线程修改这个变量值时，新值其他线程立即得知)
-2.禁止指令重新排序
+
++ 保证此变量对所有线程的可见性(当一条线程修改这个变量值时，新值其他线程立即得知)
++ 禁止指令重新排序
+
+
+
 注意volatile修饰变量不能保证在并发条件下是线程安全的，因为java里面的**运算**并非原子操作。
-java.util.concurrent.atomic工具包，支持在单个变量上解除锁的线程安全编程。其基本的特性就是在多线程环境下，当有多个线程同时执行这些类的实例包含的方法时，具有排他性，即当某个线程进入方法，执行其中的指令时，不会被其他线程打断，而别的线程就像自旋锁一样，一直等到该方法执行完成，才由JVM从等待队列中选择一个另一个线程进入，这只是一种逻辑上的理解。
+
+java.util.concurrent.atomic工具包 ，支持在单个变量上解除锁的线程安全编程。其基本的特性就是在多线程环境下，当有多个线程同时执行这些类的实例包含的方法时，具有排他性，即当某个线程进入方法，执行其中的指令时，不会被其他线程打断，而别的线程就像自旋锁一样，一直等到该方法执行完成，才由JVM从等待队列中选择一个另一个线程进入，这只是一种逻辑上的理解。
 
 volatile是不能保证原子性的, 写了一点junit. 这里使用了包装类Integer, 来验证 对引用操作 的原子性. 可以看到使用了AtomicReference可以保证结果是正确的.
 
 ```java
 private static volatile Integer num1 = 0;
-    private static AtomicReference<Integer> ar=new AtomicReference<Integer>(num1);
+private static AtomicReference<Integer> ar=new AtomicReference<Integer>(num1);
 
     @Test
     public void dfasd111() throws InterruptedException{
