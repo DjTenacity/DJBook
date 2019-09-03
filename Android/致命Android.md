@@ -64,6 +64,22 @@ public static String ToDBC(String input) {
     },initialDelay,period, TimeUnit.HOURS);
 #### 5   **依赖冲突 **    基本常量类型，都是值传递
 
+gradlew app:dependencies查看所有的依赖
+
+```groovy
+    configurations.all {
+        //        resolutionStrategy.force 'com.android.support:support-v4:27.1.1'
+        resolutionStrategy.eachDependency {            
+            DependencyResolveDetails details ->                
+            	def requested = details.requested                
+            		if (requested.group == 'com.android.support') {                    
+                        if (!requested.name.startsWith("multidex")) {                     
+                            details.useVersion '27.1.1'                    
+                        }  }        }    }
+```
+
+
+
 
  compile ('第三方库' ,{
         exclude group: 'com.google.gson'
@@ -100,7 +116,7 @@ Manifest的错误，后来才发现Manifest的错误是需要通过打开`Androi
 
 
 
-#### 7卸载那些你想卸载又不能卸载的系统预置的 APP。
+#### 7  卸载那些你想卸载又不能卸载的系统预置的 APP。
 
 ```
 adb shell pm uninstall [-k] [--user USER_ID] 包名
@@ -121,7 +137,7 @@ adb shell pm uninstall -k --user 0 com.qihoo.browser
 
 看到 Success 字样，代表卸载成功。
 
-**1、我想卸载某个应用，但不知道这个应用包名？**
+##### **1、我想卸载某个应用，但不知道这个应用包名？**
 
 也分享下，打开应用，执行如下命令：
 
@@ -137,6 +153,12 @@ mCurrentFocus=Window{38a8f240 u0 com.qihoo.browser/com.qihoo.browser.BrowserActi
 
 能看到包名和当前页面类名，完美。
 
-**2、我把一些系统应用卸载了，怎么恢复？**
+##### **2、我把一些系统应用卸载了，怎么恢复？**
 
 黑科技虽好，但也不要把那些必要的应用给卸载了，如电话，如果真的冲动卸载了，可以通过恢复出厂设置方式恢复，问题不大，不要慌。
+
+
+
+#### 8 startForeground(1, new Notification())  自动切回桌面
+
+是因为targetSdkVersion : 28的原因, 安卓8及以上对Notification的显示做了限制更改 , 要求上传name和id
