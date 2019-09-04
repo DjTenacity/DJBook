@@ -649,7 +649,17 @@ str1 += str2  # 表示 str1 = str1 + str2
 
 ```
 
-自从 Python2.5 开始，每次处理字符串的拼接操作时（str1 += str2），Python 首先会检测 str1 还**有没有其他的引用**。如果没有的话，就会尝试原地**扩充字符串 buffer 的大小**，而不是重新分配一块内存来创建新的字符串并拷贝。
+
+
+```python
+s = ''
+for n in range(0, 100000):
+    s += str(n)
+```
+
+每次创建一个新的字符串，都需要 O(n) 的时间复杂度。因此，总的时间复杂度就为 O(1) + O(2) + … + O(n) = O(n^2)。这个结论只适用于老版本的 Python 了
+
+自从 Python2.5 开始，每次处理字符串的拼接操作时（str1 += str2），Python 首先会检测 str1 还**有没有其他的引用**。如果没有的话，就会尝试原地**扩充字符串 buffer 的大小**，而不是重新分配一块内存来创建新的字符串并拷贝。上述例子中的时间复杂度就仅为 O(n) 了。
 
 以后在写程序遇到字符串拼接时，如果使用’+='更方便，就放心地去用吧，不用过分担心效率问题了。
 
@@ -663,6 +673,8 @@ l = ' '.join(l)
 ```
 
 列表的 append 操作是 O(1) 复杂度，字符串同理。因此，这个含有 for 循环例子的时间复杂度为 n*O(1)=O(n)。
+
+
 
 #### 分割函数 split()
 
@@ -724,3 +736,214 @@ s = ' '.join(l)
 
 个人提一个更加pythonic，更加高效的办法
 s = " ".join(map(str, range(0, 10000)))*
+
+
+
+# 04 | Python “黑箱”：输入与输出
+
+## 输入输出基础
+
+```python
+name = input('your name:')
+gender = input('you are a boy?(y/n)')
+ 
+###### 输入 ######
+your name:Jack
+you are a boy?
+ 
+welcome_str = 'Welcome to the matrix {prefix} {name}.'
+welcome_dic = {
+    'prefix': 'Mr.' if gender == 'y' else 'Mrs',
+    'name': name
+}
+ 
+print('authorizing...')
+print(welcome_str.format(**welcome_dic))
+ 
+########## 输出 ##########
+authorizing...
+Welcome to the matrix Mr. Jack.
+```
+
+input() 函数暂停程序运行，同时等待键盘输入；直到回车被按下，函数的参数即为提示语，**输入的类型永远是字符串型（str）**
+
+print() 函数则接受字符串、数字、字典、列表甚至一些自定义类的输出。
+
+```python
+a = input()
+1
+b = input()
+2
+ 
+print('a + b = {}'.format(a + b))
+########## 输出 ##############
+a + b = 12
+print('type of a is {}, type of b is {}'.format(type(a), type(b)))
+########## 输出 ##############
+type of a is <class 'str'>, type of b is <class 'str'>
+print('a + b = {}'.format(int(a) + int(b)))
+########## 输出 ##############
+a + b = 3
+```
+
+**把 str 强制转换为 int 请用 int()，转为浮点数请用 float()。而在生产环境中使用强制转换时，请记得加上 try except**
+
+**Python 对 int 类型没有最大限制**（相比之下， C++ 的 int 最大为 2147483647，超过这个数字会产生溢出），但是对 float 类型依然有精度限制
+
+相当比例的安全漏洞，都来自随意的 I/O 处理。
+
+
+
+## 文件输入输出
+
+命令行的输入输出，只是 Python 交互的最基本方式，适用一些简单小程序的交互。而生产级别的 Python 代码，大部分 I/O 则来自于文件、网络、其他进程的消息等等。
+
+#### 简单的 NLP（自然语言处理）任务
+
+ NLP 任务的基本步骤，也就是下面的四步：
+
+1. 读取文件；
+2. 去除所有标点符号和换行符，并把所有大写变成小写；
+3. 合并相同的词，统计每个词出现的频率，并按照词频从大到小排序；
+4. 将结果按行输出到文件 out.txt。
+
+```python
+import re
+ 
+# 你不用太关心这个函数
+def parse(text):
+    # 使用正则表达式去除标点符号和换行符
+    text = re.sub(r'[^\w ]', ' ', text)
+ 
+    # 转为小写
+    text = text.lower()
+    
+    # 生成所有单词的列表
+    word_list = text.split(' ')
+    
+    # 去除空白单词
+    word_list = filter(None, word_list)
+    
+    # 生成单词和词频的字典
+    word_cnt = {}
+    for word in word_list:
+        if word not in word_cnt:
+            word_cnt[word] = 0
+        word_cnt[word] += 1
+    
+    # 按照词频排序
+    sorted_word_cnt = sorted(word_cnt.items(), key=lambda kv: kv[1], reverse=True)
+    
+    return sorted_word_cnt
+ 
+with open('in.txt', 'r') as fin:
+    text = fin.read()
+ 
+word_and_freq = parse(text)
+ 
+with open('out.txt', 'w') as fout:
+    for word, freq in word_and_freq:
+        fout.write('{} {}\n'.format(word, freq))
+```
+
+用 open() 函数拿到文件的指针。其中，第一个参数指定文件位置（相对位置或者绝对位置）；第二个参数，如果是 `'r'`表示读取，如果是`'w'` 则表示写入，当然也可以用 `'rw'`，表示读写都要。a 则是一个不太常用（但也很有用）的参数，表示追加（append），这样打开的文件，如果需要写入，会从原始文件的最末尾开始写入。
+
+
+
+在拿到指针后，我们可以通过 read() 函数，来读取文件的全部内容。代码 text = fin.read() ，即表示把文件所有内容读取到内存中，并赋值给变量 text。这么做自然也是有利有弊：
+
+- 优点是方便，接下来我们可以很方便地调用 parse 函数进行分析；
+- 缺点是如果文件过大，一次性读取可能造成内存崩溃。
+
+我们可以给 read 指定参数 size ，用来表示读取的最大长度。还可以通过 readline() 函数，每次读取一行，这种做法常用于数据挖掘（Data Mining）中的数据清洗，在写一些小的程序时非常轻便。
+
+如果每行之间没有关联，这种做法也可以降低内存的压力。而 write() 函数，可以把参数中的字符串输出到文件中，也很容易理解。
+
+**open() 函数对应于 close() 函数，也就是说，如果你打开了文件，在完成读取任务后，就应该立刻关掉它。而如果你使用了 with 语句，就不需要显式调用 close()。在 with 的语境下任务执行完毕后，close() 函数会被自动调用**
+
+所有 I/O 都应该进行错误处理。因为 I/O 操作可能会有各种各样的情况出现，而一个健壮（robust）的程序，需要能应对各种情况的发生，而不应该崩溃（故意设计的情况除外）。
+
+**代码权限管理非常重要**
+
+
+
+
+
+## JSON 序列化与实战
+
+JSON（JavaScript Object Notation）是一种轻量级的数据交换格式，它的设计意图是把所有事情都用设计的字符串来表示，这样既方便在互联网上传递信息，也方便人进行阅读
+
+```python
+import json
+ 
+params = {
+    'symbol': '123456',
+    'type': 'limit',
+    'price': 123.4,
+    'amount': 23
+}
+ 
+params_str = json.dumps(params)
+ 
+print('after json serialization')
+print('type of params_str = {}, params_str = {}'.format(type(params_str), params))
+ 
+original_params = json.loads(params_str)
+ 
+print('after json deserialization')
+print('type of original_params = {}, original_params = {}'.format(type(original_params), original_params))
+ 
+########## 输出 ##########
+ 
+after json serialization
+type of params_str = <class 'str'>, params_str = {'symbol': '123456', 'type': 'limit', 'price': 123.4, 'amount': 23}
+after json deserialization
+type of original_params = <class 'dict'>, original_params = {'symbol': '123456', 'type': 'limit', 'price': 123.4, 'amount': 23}
+
+```
+
+- json.dumps() 这个函数，接受 Python 的基本数据类型，然后将其序列化为 string；
+- json.loads() 这个函数，接受一个合法字符串，然后将其反序列化为 Python 的基本数据类型。
+
+**记得加上错误处理**
+
+
+
+输出字符串到文件，或者从文件中读取 JSON 字符串
+
+```python
+import json
+ 
+params = {
+    'symbol': '123456',
+    'type': 'limit',
+    'price': 123.4,
+    'amount': 23
+}
+ 
+with open('params.json', 'w') as fout:
+    params_str = json.dump(params, fout)
+ 
+with open('params.json', 'r') as fin:
+    original_params = json.load(fin)
+ 
+print('after json deserialization')
+print('type of original_params = {}, original_params = {}'.format(type(original_params), original_params))
+ 
+########## 输出 ##########
+ 
+after json deserialization
+type of original_params = <class 'dict'>, original_params = {'symbol': '123456', 'type': 'limit', 'price': 123.4, 'amount': 23}
+```
+
+可以通过 JSON 将用户的个人配置输出到文件，方便下次程序启动时自动读取。这也是现在普遍运用的成熟做法。
+
+## 总结
+
+- I/O 操作需谨慎，一定要进行充分的错误处理，并细心编码，防止出现编码漏洞；
+- 编码时，对内存占用和磁盘占用要有充分的估计，这样在出错时可以更容易找到原因；
+- JSON 序列化是很方便的工具，要结合实战多多练习；
+- 代码尽量简洁、清晰，哪怕是初学阶段，也要有一颗当元帅的心。
+
+filter(None, Iterable) 是一种容易出错的用法，这里不止过滤空字符串，还能过滤 0，None，空列表等值。这里的 None，严格意义上等于 lambda x: x, 是一个 callable。
+
