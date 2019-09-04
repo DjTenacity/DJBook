@@ -162,3 +162,11 @@ mCurrentFocus=Window{38a8f240 u0 com.qihoo.browser/com.qihoo.browser.BrowserActi
 #### 8 startForeground(1, new Notification())  自动切回桌面
 
 是因为targetSdkVersion : 28的原因, 安卓8及以上对Notification的显示做了限制更改 , 要求上传name和id
+
+
+
+#### [9  Android8.0 通知栏不显示、无横幅通知问题解决](https://blog.csdn.net/Mr_Leixiansheng/article/details/84942589)
+
+##### 10 如何使混淆过后的第三方界面与自己的app风格统一
+
+application里面 registerActivityLifecycleCallbacks 拿到特定的Activity 然后再修改
