@@ -170,3 +170,33 @@ mCurrentFocus=Window{38a8f240 u0 com.qihoo.browser/com.qihoo.browser.BrowserActi
 ##### 10 如何使混淆过后的第三方界面与自己的app风格统一
 
 application里面 registerActivityLifecycleCallbacks 拿到特定的Activity 然后再修改
+
+
+
+##### [11 Android 混淆问题排查](https://blog.csdn.net/github_33304260/article/details/85269844) 
+
+###### [Android之如何看混淆后的错误日志代码](https://blog.csdn.net/u011068702/article/details/52873454)
+
+###### Android 代码proguard混淆之后的错误log
+
+正式上线的项目都会做代码混淆防止反编译，目前本人使用的是progurad。
+
+项目中加入了UncatchExceptionHandler存储错误日志到sd卡，以便发现Realease版本的bug。但是最近发现一个问题，代码混淆的同时，错误日志也被混淆了。
+
+得到的错误诸如  com.xxx.a.b.c(unkonw source); 无法定位具体的类名和方法。
+
+于是需要将错误日志还原。需要以下工具。
+
++ 1.项目目录的progurad下有一个mapping.txt文件 这是混淆后的名字 和原名字的映射关系。
+
++ 2.在ADT安装目录的sdk\tools\proguard\bin下有三个工具，其中proguardgui.bat就是用来还原的图形化工具。
+
++ 3打开proguardgui，选择ReTrace，之后的界面就不用介绍了，各位聪明的程序猿们，开心的还原你的错误日志然后苦逼的去改bug吧。
+
++ 补充：如果想要在log中保留错误的代码行号，需要在混淆配置中添加下面这行
+
+```
+#保留crash日志的行号
+-keepattributes SourceFile,LineNumberTable 
+```
+
