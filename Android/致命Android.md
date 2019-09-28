@@ -167,13 +167,13 @@ mCurrentFocus=Window{38a8f240 u0 com.qihoo.browser/com.qihoo.browser.BrowserActi
 
 #### [9  Android8.0 通知栏不显示、无横幅通知问题解决](https://blog.csdn.net/Mr_Leixiansheng/article/details/84942589)
 
-##### 10 如何使混淆过后的第三方界面与自己的app风格统一
+#### 10 如何使混淆过后的第三方界面与自己的app风格统一
 
 application里面 registerActivityLifecycleCallbacks 拿到特定的Activity 然后再修改
 
 
 
-##### [11 Android 混淆问题排查](https://blog.csdn.net/github_33304260/article/details/85269844) 
+#### [11 Android 混淆问题排查](https://blog.csdn.net/github_33304260/article/details/85269844) 
 
 ###### [Android之如何看混淆后的错误日志代码](https://blog.csdn.net/u011068702/article/details/52873454)
 

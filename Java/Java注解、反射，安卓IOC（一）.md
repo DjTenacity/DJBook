@@ -24,7 +24,7 @@ Java中5个基本的注解分别为：
 
 #### 元 Annotation
 
-元Annotation是用来修饰其他注解定义，即注解其他注解。
+元**Annotation是用来修饰其他注解定义，即注解其他注解**。
  Java中有6种元注解，其中@Native注解一般用于给IDE工具做提示用。下边具体介绍其他几种注解。
 
 1、@Retention：指定本修饰的注解可以保留多长时间。包含了一个RetentionPolicy类的value值，所以需指定该value的值。
