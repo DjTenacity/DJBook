@@ -245,7 +245,7 @@ public class MyRemoteServiceConnection implements ServiceConnection {
 
 AIDL 是 android 系统 IPC 进程间通讯协议，但是记住仅仅只是 android ，换个平台就不是 AIDL 了。
 
-android 中每个进程都有自己独立的虚拟机 JVM ， 每个JVM 的内存时独立的，所以进程间通信依靠传递对象引用是不行的，因为内存是不连续的， A进程 的内存中有的对象，你把对象引用给到 B进程内存里面可是没这个对象的，所以 google 就提供了 AIDL
+android 中每个进程都有自己独立的虚拟机 ， 每个虚拟机的内存是时独立的，所以进程间通信依靠传递对象引用是不行的，因为内存是不连续的， A进程 的内存中有的对象，你把对象引用给到 B进程内存里面可是没这个对象的，所以 google 就提供了 AIDL
 
 AIDL  
 ![img](https://mmbiz.qpic.cn/mmbiz/Jkr8IKxMfUcj6SE3B6PHGa5gQHialNeUsF2KQGTpKiapN6cudgJXQL1yxjHluLNGSNIsYYPRl9odmHUETuW0MpQw/640?wx_fmt=other&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
@@ -264,7 +264,7 @@ AIDL 方法种若要传递对象类型，对象类型需要实现 Parcelable 序
 
 ![img](https://mmbiz.qpic.cn/mmbiz/Jkr8IKxMfUcj6SE3B6PHGa5gQHialNeUsia41wNWictsQsNGIsrjgNGlxnnOHiamwCoo9k6sf8ctX4icVbgaQ1BKmWw/640?wx_fmt=other&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
-IPC 通信的核心方法就在于期中的 transact 和 onTransact 方法
+IPC 通信的核心方法就在于其中的 transact 和 onTransact 方法
 
 - transact 会调用系统底层 IPC 去传递数据
 - onTransact 会接受系统底层 IPC 传递过来的数据
